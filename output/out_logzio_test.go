@@ -33,7 +33,6 @@ func TestSerializeRecord(test *testing.T) {
 		require.NotNil(test, err)
 	}
 
-	require.Equal(test, result["fluentbit_tag"], "atag")
 	require.Equal(test, result["key"], "value")
 	require.Equal(test, result["five"], float64(5))
 }
@@ -77,9 +76,7 @@ func (p *TestPlugin) GetRecord(dec *output.FLBDecoder) (int, interface{}, map[in
 	}
 
 	record := map[interface{}]interface{}{
-		"type":      "override",
-		"host":      "host",
-		"output_id": defaultId,
+		"type": "override",
 	}
 
 	foo := map[interface{}]interface{}{
@@ -127,7 +124,5 @@ func TestPluginFlusher(test *testing.T) {
 	require.Equal(test, foo["bar"], "1")
 	require.Equal(test, foo["baz"], float64(2))
 	require.Equal(test, j["type"], "override")
-	require.Equal(test, j["host"], "host")
-	require.Equal(test, j["output_id"], "logzio_output_1")
 	require.Contains(test, j, "@timestamp")
 }

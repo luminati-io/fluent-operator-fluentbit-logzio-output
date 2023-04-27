@@ -7,12 +7,12 @@ import (
 	"C"
 	"encoding/json"
 	"fmt"
-	"github.com/fluent/fluent-bit-go/output"
-	"os"
 	"regexp"
 	"strconv"
 	"time"
 	"unsafe"
+
+	"github.com/fluent/fluent-bit-go/output"
 )
 
 const (
@@ -255,23 +255,7 @@ func serializeRecord(ts interface{}, tag string, record map[interface{}]interfac
 		}
 	}
 
-	if _, ok := body["output_id"]; !ok {
-		if ltype != "" {
-			body["output_id"] = outputId
-		}
-	}
-
-	if _, ok := body["host"]; !ok {
-		// Get hostname
-		hostname, err := os.Hostname()
-		if err != nil {
-			hostname = "localhost"
-		}
-		body["host"] = hostname
-	}
-
 	body["@timestamp"] = formatTimestamp(ts)
-	body["fluentbit_tag"] = tag
 
 	serialized, err := json.Marshal(body)
 	if err != nil {
