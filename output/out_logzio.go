@@ -211,16 +211,16 @@ func initConfigParams(ctx unsafe.Pointer) error {
 	if err == nil {
 		dedotNested, err = strconv.ParseBool(output.FLBPluginConfigKey(ctx, "dedot_nested"))
 		if err != nil {
-			logger.Debug(fmt.Sprintf("Failed parsing dedot nested value, set to false"))
+			logger.Debug("Failed parsing dedot nested value, set to false")
 		}
 
 		dedotNewSeperator = output.FLBPluginConfigKey(ctx, "dedot_new_seperator")
 		if dedotNewSeperator == "" || dedotNewSeperator == "." {
-			logger.Debug(fmt.Sprintf("Failed parsing dedot new seperator value, set to _"))
+			logger.Debug("Failed parsing dedot new seperator value, set to _")
 			dedotNewSeperator = "_"
 		}
 	} else {
-		logger.Debug(fmt.Sprintf("Failed parsing dedotEnabled value, set to false"))
+		logger.Debug("Failed parsing dedotEnabled value, set to false")
 	}
 	logger.Debug(fmt.Sprintf("dedot seperator: %s", dedotNewSeperator))
 
@@ -271,7 +271,7 @@ func parseJSON(record map[interface{}]interface{}, dedotEnabled bool, dedotNeste
 	for k, v := range record {
 		stringKey := k.(string)
 		if dedotEnabled {
-			regex := regexp.MustCompile("\\.")
+			regex := regexp.MustCompile(`\.`)
 			stringKey = regex.ReplaceAllString(stringKey, dedotNewSeperator)
 		}
 
