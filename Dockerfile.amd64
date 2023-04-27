@@ -1,0 +1,10 @@
+FROM --platform=linux/amd64 golang:1.20.3-bullseye AS build
+RUN mkdir /fluentbit-logzio
+COPY / /fluentbit-logzio
+WORKDIR /fluentbit-logzio
+RUN GOOS=linux GOARCH=amd64 \
+    go build -buildmode=c-shared -o build/out_logzio-linux.so ./output
+
+FROM kubesphere/fluent-bit:v2.0.11
+COPY --from=build /fluentbit-logzio/build/out_logzio-linux.so /fluent-bit/plugins/out_logzio-linux.so
+ENTRYPOINT ["/fluent-bit/bin/fluent-bit-watcher", "-e", "/fluent-bit/plugins/out_logzio-linux.so"]
